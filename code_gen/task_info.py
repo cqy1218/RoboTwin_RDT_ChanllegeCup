@@ -1251,13 +1251,77 @@ STAMP_SEAL = {
 
 
 
-SHAKE_BOTTLE_HORIZONTALLY = {}
+SHAKE_BOTTLE_HORIZONTALLY = {
+    "task_name": "shake_bottle_horizontally",
+    "task_description": "Shake the bottle horizontally with proper arm.\
+                        Grasp the bottle with specified arm. Shake the bottle horizontally by moving the arm left and right.",
+    "current_code": """
+                class gpt_shake_bottle_horizontally(shake_bottle_horizontally):
+                    def play_once(self):
+                        pass
+                """,
+    "actor_list": {
+        "self.bottle": {
+            "name": "bottle",
+            "description": "The bottle that needs to be shaken horizontally.",
+            "modelname": "001_bottle", 
+        }
+    }
+}
 
 
-SHAKE_BOTTLE = {}
+SHAKE_BOTTLE = {
+    "task_name": "shake_bottle",
+    "task_description": "Shake the bottle with proper arm.\
+                        Grasp the bottle with specified arm. Shake the bottle by moving the arm up and down.",
+    "current_code": """
+                class gpt_shake_bottle(shake_bottle):
+                    def play_once(self):
+                        pass
+                """,
+    "actor_list": {
+        "self.bottle": {
+            "name": "bottle",
+            "description": "The bottle that needs to be shaken.",
+            "modelname": "001_bottle",
+        }
+    }
+}
 
 
-PUT_BOTTLES_DUSTBIN = {}
+PUT_BOTTLES_DUSTBIN = {
+    "task_name": "put_bottles_dustbin",
+    "task_description": "Use one arm to pick the bottle and put it into the dustbin.\
+                        Grasp the bottle with specified arm. Place the bottle into the dustbin. \
+                        Note: Don't set pre_dis_axis to fp, because the pre_dis_axis is not used in this task.",
+    "current_code": """
+                class gpt_put_bottles_dustbin(put_bottles_dustbin):
+                    def play_once(self):
+                        pass
+                """,
+    "actor_list": {
+        "self.bottles[0]": {
+            "name": "bottle",
+            "description": "The first bottle that needs to be placed in the dustbin.",
+            "modelname": "114_bottle",
+        },
+        "self.bottles[1]": {
+            "name": "bottle",
+            "description": "The second bottle that needs to be placed in the dustbin.",
+            "modelname": "114_bottle",
+        },
+        "self.bottles[2]": {
+            "name": "bottle",
+            "description": "The third bottle that needs to be placed in the dustbin.",
+            "modelname": "114_bottle",
+        },
+        "self.dustbin": {
+            "name": "dustbin",
+            "description": "The dustbin where the bottles need to be placed.",
+            "modelname": "011_dustbin",
+        },
+    }
+}
 
 
 

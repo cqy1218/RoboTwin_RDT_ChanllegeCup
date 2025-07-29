@@ -13,9 +13,9 @@ from diffusion_policy.env_runner.dp_runner import DPRunner
 
 class DP:
 
-    def __init__(self, ckpt_file: str):
+    def __init__(self, ckpt_file: str, n_obs_steps, n_action_steps):
         self.policy = self.get_policy(ckpt_file, None, "cuda:0")
-        self.runner = DPRunner(output_dir=None)
+        self.runner = DPRunner(n_obs_steps=n_obs_steps, n_action_steps=n_obs_steps)
 
     def update_obs(self, observation):
         self.runner.update_obs(observation)

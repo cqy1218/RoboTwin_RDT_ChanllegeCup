@@ -120,4 +120,4 @@ class put_object_cabinet(Base_Task):
         target_pose = self.cabinet.get_functional_point(0)
         tag = np.all(abs(object_pose[:2] - target_pose[:2]) < np.array([0.05, 0.05]))
         return ((object_pose[2] - self.origin_z) > 0.007 and (object_pose[2] - self.origin_z) < 0.12 and tag
-                and self.robot.is_left_gripper_open() if self.arm_tag == "left" else self.robot.is_right_gripper_open())
+                and (self.robot.is_left_gripper_open() if self.arm_tag == "left" else self.robot.is_right_gripper_open()))
