@@ -1,11 +1,21 @@
 # Basic experiment configuration
-policy_name: null
-task_name: null
-task_config: null
-ckpt_setting: null
+policy_name: RDT
+task_name: place_dual_shoes
+task_config: demo_randomized
+ckpt_setting: RDT_demo_randomized  
 seed: null
-instruction_type: unseen
-policy_conda_env: null
+checkpoint_id: 20000 
 
-checkpoint_id: null
-rdt_step: 30
+
+rdt_step: 30        
+use_ee_control: true 
+left_arm_dim: 7      
+right_arm_dim: 7     
+obs_window_size: 1   
+
+
+use_quantization: true  
+precision: fp16         
+device: cuda           
+
+rdk_s100_optimized: false 

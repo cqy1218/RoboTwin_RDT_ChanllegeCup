@@ -22,7 +22,7 @@ def get_model(usr_args):  # keep
     rdt = RDT(
         os.path.join(
             parent_directory,
-            f"checkpoints/{model_name}/checkpoint-{checkpoint_id}/pytorch_model/mp_rank_00_model_states.pt",
+            f"checkpoints/{model_name}/checkpoint-{checkpoint_id}/model.safetensors",
         ),
         usr_args["task_name"],
         left_arm_dim,
@@ -33,7 +33,7 @@ def get_model(usr_args):  # keep
 
 
 def eval(TASK_ENV, model, observation):
-    """x
+    """
     All the function interfaces below are just examples
     You can modify them according to your implementation
     But we strongly recommend keeping the code logic unchanged

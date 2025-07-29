@@ -118,7 +118,6 @@ class RoboticDiffusionTransformerModel(object):
             )
         else:
             _model = RDTRunner.from_pretrained(pretrained)
-
         return _model
 
     def get_text_encoder(self, pretrained_text_encoder_name_or_path):
@@ -157,7 +156,6 @@ class RoboticDiffusionTransformerModel(object):
             self.policy.load_state_dict(checkpoint["module"])
         elif filename.endswith(".safetensors"):
             from safetensors.torch import load_model
-
             load_model(self.policy, pretrained)
         else:
             raise NotImplementedError(f"Unknown checkpoint format: {pretrained}")

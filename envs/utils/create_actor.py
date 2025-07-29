@@ -2,7 +2,6 @@ import sapien.core as sapien
 import numpy as np
 from pathlib import Path
 import transforms3d as t3d
-import sapien.physx as sapienp
 import json
 import os, re
 
@@ -40,22 +39,23 @@ def create_entity_box(
     entity.set_pose(pose)
 
     # create PhysX dynamic rigid body
-    rigid_component = (sapien.physx.PhysxRigidDynamicComponent()
-                       if not is_static else sapien.physx.PhysxRigidStaticComponent())
+    if not is_static:
+        rigid_component = scene.create_physx_rigid_dynamic_component()
+    else:
+        rigid_component = scene.create_physx_rigid_static_component()
+        
     rigid_component.attach(
-        sapien.physx.PhysxCollisionShapeBox(half_size=half_size, material=scene.default_physical_material))
+        scene.create_physx_collision_shape_box(half_size=half_size, material=scene.default_physical_material)
+    )
 
     # Add texture
     if texture_id is not None:
-
         # test for both .png and .jpg
         texturepath = f"./assets/background_texture/{texture_id}.png"
         # create texture from file
         texture2d = sapien.render.RenderTexture2D(texturepath)
         material = sapien.render.RenderMaterial()
         material.set_base_color_texture(texture2d)
-        # renderer.create_texture_from_file(texturepath)
-        # material.set_diffuse_texture(texturepath)
         material.base_color = [1, 1, 1, 1]
         material.metallic = 0.1
         material.roughness = 0.3
@@ -63,10 +63,11 @@ def create_entity_box(
         material = sapien.render.RenderMaterial(base_color=[*color[:3], 1])
 
     # create render body for visualization
-    render_component = sapien.render.RenderBodyComponent()
+    render_component = scene.create_render_body_component()
     render_component.attach(
         # add a box visual shape with given size and rendering material
-        sapien.render.RenderShapeBox(half_size, material))
+        scene.create_render_shape_box(half_size, material)
+    )
 
     entity.add_component(rigid_component)
     entity.add_component(render_component)
@@ -99,10 +100,8 @@ def create_box(
     if boxtype == "default":
         data = {
             "center": [0, 0, 0],
-            "extents":
-            half_size,
-            "scale":
-            half_size,
+            "extents": half_size,
+            "scale": half_size,
             "target_pose": [[[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 1]]],
             "contact_points_pose": [
                 [
@@ -129,13 +128,8 @@ def create_box(
                     [0, 1, 0, 0.0],
                     [0, 0, 0, 1],
                 ],  # top_down(back)
-                # [[0, 0, 1, 0], [0, -1, 0, 0], [1, 0, 0, 0.0], [0, 0, 0, 1]], # front
-                # [[0, -1, 0, 0], [0, 0, -1, 0], [1, 0, 0, 0.0], [0, 0, 0, 1]], # right
-                # [[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, 0.0], [0, 0, 0, 1]], # left
-                # [[0, 0, -1, 0], [0, 1, 0, 0], [1, 0, 0, 0.0], [0, 0, 0, 1]], # back
             ],
-            "transform_matrix":
-            np.eye(4).tolist(),
+            "transform_matrix": np.eye(4).tolist(),
             "functional_matrix": [
                 [
                     [1.0, 0.0, 0.0, 0.0],
@@ -158,10 +152,8 @@ def create_box(
     else:
         data = {
             "center": [0, 0, 0],
-            "extents":
-            half_size,
-            "scale":
-            half_size,
+            "extents": half_size,
+            "scale": half_size,
             "target_pose": [[[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 1], [0, 0, 0, 1]]],
             "contact_points_pose": [
                 [[0, 0, 1, 0], [0, -1, 0, 0], [1, 0, 0, 0.7], [0, 0, 0, 1]],  # front
@@ -173,8 +165,7 @@ def create_box(
                 [[0, 1, 0, 0], [0, 0, 1, 0], [1, 0, 0, -0.7], [0, 0, 0, 1]],  # left
                 [[0, 0, -1, 0], [0, 1, 0, 0], [1, 0, 0, -0.7], [0, 0, 0, 1]],  # back
             ],
-            "transform_matrix":
-            np.eye(4).tolist(),
+            "transform_matrix": np.eye(4).tolist(),
             "functional_matrix": [
                 [
                     [1.0, 0.0, 0.0, 0.0],
@@ -197,7 +188,7 @@ def create_box(
     return Actor(entity, data)
 
 
-# create spere
+# create sphere
 def create_sphere(
     scene,
     pose: sapien.Pose,
@@ -213,22 +204,23 @@ def create_sphere(
     entity.set_pose(pose)
 
     # create PhysX dynamic rigid body
-    rigid_component = (sapien.physx.PhysxRigidDynamicComponent()
-                       if not is_static else sapien.physx.PhysxRigidStaticComponent())
+    if not is_static:
+        rigid_component = scene.create_physx_rigid_dynamic_component()
+    else:
+        rigid_component = scene.create_physx_rigid_static_component()
+        
     rigid_component.attach(
-        sapien.physx.PhysxCollisionShapeSphere(radius=radius, material=scene.default_physical_material))
+        scene.create_physx_collision_shape_sphere(radius=radius, material=scene.default_physical_material)
+    )
 
     # Add texture
     if texture_id is not None:
-
         # test for both .png and .jpg
         texturepath = f"./assets/textures/{texture_id}.png"
         # create texture from file
         texture2d = sapien.render.RenderTexture2D(texturepath)
         material = sapien.render.RenderMaterial()
         material.set_base_color_texture(texture2d)
-        # renderer.create_texture_from_file(texturepath)
-        # material.set_diffuse_texture(texturepath)
         material.base_color = [1, 1, 1, 1]
         material.metallic = 0.1
         material.roughness = 0.3
@@ -236,10 +228,11 @@ def create_sphere(
         material = sapien.render.RenderMaterial(base_color=[*color[:3], 1])
 
     # create render body for visualization
-    render_component = sapien.render.RenderBodyComponent()
+    render_component = scene.create_render_body_component()
     render_component.attach(
-        # add a box visual shape with given size and rendering material
-        sapien.render.RenderShapeSphere(radius=radius, material=material))
+        # add a sphere visual shape with given size and rendering material
+        scene.create_render_shape_sphere(radius=radius, material=material)
+    )
 
     entity.add_component(rigid_component)
     entity.add_component(render_component)
@@ -266,23 +259,25 @@ def create_cylinder(
     entity.set_pose(pose)
 
     # create PhysX dynamic rigid body
-    rigid_component = sapien.physx.PhysxRigidDynamicComponent()
+    rigid_component = scene.create_physx_rigid_dynamic_component()
     rigid_component.attach(
-        sapien.physx.PhysxCollisionShapeCylinder(
+        scene.create_physx_collision_shape_cylinder(
             radius=radius,
             half_length=half_length,
             material=scene.default_physical_material,
-        ))
+        )
+    )
 
     # create render body for visualization
-    render_component = sapien.render.RenderBodyComponent()
+    render_component = scene.create_render_body_component()
     render_component.attach(
-        # add a box visual shape with given size and rendering material
-        sapien.render.RenderShapeCylinder(
+        # add a cylinder visual shape with given size and rendering material
+        scene.create_render_shape_cylinder(
             radius=radius,
             half_length=half_length,
             material=sapien.render.RenderMaterial(base_color=[*color[:3], 1]),
-        ))
+        )
+    )
 
     entity.add_component(rigid_component)
     entity.add_component(render_component)
@@ -293,7 +288,7 @@ def create_cylinder(
     return entity
 
 
-# create box
+# create visual box
 def create_visual_box(
     scene,
     pose: sapien.Pose,
@@ -308,10 +303,11 @@ def create_visual_box(
     entity.set_pose(pose)
 
     # create render body for visualization
-    render_component = sapien.render.RenderBodyComponent()
+    render_component = scene.create_render_body_component()
     render_component.attach(
         # add a box visual shape with given size and rendering material
-        sapien.render.RenderShapeBox(half_size, sapien.render.RenderMaterial(base_color=[*color[:3], 1])))
+        scene.create_render_shape_box(half_size, sapien.render.RenderMaterial(base_color=[*color[:3], 1]))
+    )
 
     entity.add_component(render_component)
     entity.set_pose(pose)
@@ -353,15 +349,12 @@ def create_table(
 
     # Add texture
     if texture_id is not None:
-
         # test for both .png and .jpg
         texturepath = f"./assets/background_texture/{texture_id}.png"
         # create texture from file
         texture2d = sapien.render.RenderTexture2D(texturepath)
         material = sapien.render.RenderMaterial()
         material.set_base_color_texture(texture2d)
-        # renderer.create_texture_from_file(texturepath)
-        # material.set_diffuse_texture(texturepath)
         material.base_color = [1, 1, 1, 1]
         material.metallic = 0.1
         material.roughness = 0.3
@@ -424,7 +417,7 @@ def create_obj(
         builder.set_physx_body_type("dynamic")
 
     if not no_collision:
-        if convex == True:
+        if convex:
             builder.add_multiple_convex_collisions_from_file(filename=str(file_name), scale=scale)
         else:
             builder.add_nonconvex_collision_from_file(filename=str(file_name), scale=scale)
@@ -469,7 +462,7 @@ def create_glb(
     else:
         builder.set_physx_body_type("dynamic")
 
-    if convex == True:
+    if convex:
         builder.add_multiple_convex_collisions_from_file(filename=str(file_name), scale=scale)
     else:
         builder.add_nonconvex_collision_from_file(
@@ -544,7 +537,7 @@ def create_actor(
     else:
         builder.set_physx_body_type("dynamic")
 
-    if convex == True:
+    if convex:
         builder.add_multiple_convex_collisions_from_file(filename=str(collision_file), scale=scale)
     else:
         builder.add_nonconvex_collision_from_file(
@@ -565,7 +558,7 @@ def create_urdf_obj(scene, pose: sapien.Pose, modelname: str, scale=1.0, fix_roo
 
     modeldir = Path("./assets/objects") / modelname
     json_file_path = modeldir / "model_data.json"
-    loader: sapien.URDFLoader = scene.create_urdf_loader()
+    loader = scene.create_urdf_loader()
     loader.scale = scale
 
     try:
@@ -577,7 +570,7 @@ def create_urdf_obj(scene, pose: sapien.Pose, modelname: str, scale=1.0, fix_roo
 
     loader.fix_root_link = fix_root_link
     loader.load_multiple_collisions_from_file = True
-    object: sapien.Articulation = loader.load(str(modeldir / "mobility.urdf"))
+    object = loader.load(str(modeldir / "mobility.urdf"))
 
     object.set_root_pose(pose)
     object.set_name(modelname)
@@ -626,7 +619,7 @@ def create_sapien_urdf_obj(
         model_data = None
         trans_mat = np.eye(4)
 
-    loader: sapien.URDFLoader = scene.create_urdf_loader()
+    loader = scene.create_urdf_loader()
     loader.scale = scale
     loader.fix_root_link = fix_root_link
     loader.load_multiple_collisions_from_file = True

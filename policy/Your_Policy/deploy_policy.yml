@@ -1,9 +1,22 @@
-# Basic experiment configuration (keep unchanged)
-policy_name: null
-task_name: null
-task_config: null
-ckpt_setting: null
+# Basic experiment configuration
+policy_name: RDT
+task_name: place_dual_shoes
+task_config: demo_randomized
+ckpt_setting: RDT_demo_randomized  # 对应训练时的${model_name}
 seed: null
-instruction_type: unseen
+checkpoint_id: 20000 # 检查点ID（如10000）
 
-# Add Parameters You Need
+# RDT model parameter
+rdt_step: 30        # 动作预测步长（必须与训练时一致）
+use_ee_control: true # RDT默认输出末端执行器位姿
+left_arm_dim: 7      # 左臂自由度（xyz + 四元数）
+right_arm_dim: 7     # 右臂自由度
+obs_window_size: 1   # RDT使用单帧观测（无需历史）
+
+# 部署优化
+use_quantization: true  # 量化模型以适应端侧
+precision: fp16         # 半精度加速
+device: cuda            # 优先使用GPU
+
+# RDK S100 专用
+rdk_s100_optimized: false # 决赛时改为true

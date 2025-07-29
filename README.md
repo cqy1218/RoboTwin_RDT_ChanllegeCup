@@ -1,4 +1,4 @@
-<h1 align="center">
+2<h1 align="center">
   <a href="https://robotwin-benchmark.github.io"><b>RoboTwin</b> Bimanual Robotic Manipulation Platform<br></a>
 </h1>
 <h2 align="center">Lastest Version: RoboTwin 2.0<br>🤲 <a href="https://robotwin-platform.github.io/">Webpage</a> | <a href="https://robotwin-platform.github.io/doc/">Document</a> | <a href="https://arxiv.org/abs/2506.18088">Paper</a> | <a href="https://robotwin-platform.github.io/doc/community/index.html">Community</a></h2>
@@ -78,6 +78,9 @@ Running the following command will first search for a random seed for the target
 ```
 bash collect_data.sh ${task_name} ${task_config} ${gpu_id}
 # Example: bash collect_data.sh beat_block_hammer demo_randomized 0
+```
+```
+bash collect_data.sh place_dual_shoes demo_randomized 0
 ```
 
 ## 2. Task Config

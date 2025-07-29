@@ -63,11 +63,11 @@ export CUDA_VISIBLE_DEVICES=$CUDA_USE
 
 python -m data.compute_dataset_stat_hdf5 --task_name $CONFIG_NAME
 
-accelerate launch --main_process_port=28499  main.py \
+WANDB_MODE="offline" accelerate launch --main_process_port=28499  main.py \
     --deepspeed="./configs/zero2.json" \
-    --pretrained_model_name_or_path=$PRETRAINED_MODEL_NAME \
-    --pretrained_text_encoder_name_or_path=$TEXT_ENCODER_NAME \
-    --pretrained_vision_encoder_name_or_path=$VISION_ENCODER_NAME \
+    --pretrained_model_name_or_path='/mnt/cqy/RoboTwin/policy/RDT/rdt-1b' \
+    --pretrained_text_encoder_name_or_path='/mnt/cqy/RoboTwin/policy/RDT/t5-v1_1-xxl' \
+    --pretrained_vision_encoder_name_or_path='/mnt/cqy/RoboTwin/policy/RDT/siglip-so400m-patch14-384' \
     --output_dir=$OUTPUT_DIR \
     --train_batch_size=$TRAIN_BATCH_SIZE \
     --sample_batch_size=$SAMPLE_BATCH_SIZE \

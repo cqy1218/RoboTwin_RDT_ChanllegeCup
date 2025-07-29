@@ -4,6 +4,10 @@ from train.train import train
 
 from accelerate.logging import get_logger
 
+# 2025.0711  debug  +3
+import sys
+from pathlib import Path
+sys.path = list(map(str, sys.path))
 
 def parse_args(input_args=None):
     parser = argparse.ArgumentParser(description="Main script for training RDT.")
